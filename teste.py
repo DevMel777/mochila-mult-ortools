@@ -43,5 +43,28 @@ def main():
     print("\nRestrição criada:")
     print(f"{expressao} <= {capacidade}")
 
+    # Função Objetivo:
+    # Maximizar o valor total dos itens selecionados.
+    #
+    # Max Z = Σ(valor_i * x_i)
+
+    func_obj = solver.Objective()
+
+    expressao = ""
+
+    for i in range(len(valor)):
+        func_obj.SetCoefficient(x[i], valor[i])
+
+        expressao += f"{valor[i]}{x[i].name()}"
+
+        if i < len(valor) - 1:
+            expressao += " + "
+
+    func_obj.SetMaximization()
+
+    print("\nFunção objetivo")
+    print(f"Maximizar: Z = {expressao}")
+
+
 if __name__ == "__main__":
     main()
