@@ -45,7 +45,6 @@ def main():
 
     # Função Objetivo:
     # Maximizar o valor total dos itens selecionados.
-    #
     # Max Z = Σ(valor_i * x_i)
 
     func_obj = solver.Objective()
@@ -64,6 +63,44 @@ def main():
 
     print("\nFunção objetivo")
     print(f"Maximizar: Z = {expressao}")
+
+   
+   # Executa o modelo utilizando o solver SCIP.
+    print("\nResolvendo o modelo...")
+
+    status = solver.Solve()
+
+    # Verifica se uma solução ótima foi encontrada.
+    if status != pywraplp.Solver.OPTIMAL:
+        print("Não foi encontrada uma solução ótima.")
+        return
+
+    print("Modelo resolvido com sucesso!")
+
+    print("\nDescrevendo solução:\n")
+
+    # Valor ótimo da função objetivo.
+    print(f"Valor máximo = {func_obj.Value()}")
+
+    peso_total = 0
+
+    # Percorre todas as variáveis de decisão.
+    for i in range(len(valor)):
+
+        # Se a variável vale 1, o item foi selecionado.
+        if x[i].solution_value() == 1:
+
+            print(
+                f"{x[i].name()} (selecionado) | "
+                f"Item {i} | "
+                f"Valor = {valor[i]} | "
+                f"Peso = {peso[i]}"
+            )
+
+            peso_total += peso[i]
+
+    print(f"\nPeso utilizado = {peso_total}")
+    print(f"Capacidade = {capacidade}")
 
 
 if __name__ == "__main__":
