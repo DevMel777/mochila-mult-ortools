@@ -26,6 +26,22 @@ def main():
         x.append(solver.IntVar(0, 1, f"x{i}"))  
     
     print(f"Variáveis criadas: {x, valor, peso, capacidade}") 
+  
+   # Restrição capacidade da mochila:
+   # Σ(peso_i * x_i) <= capacidade
+    restricao = solver.Constraint(0, capacidade, "peso_maximo")
+
+    expressao = ""
+
+    for i in range(len(peso)):
+        restricao.SetCoefficient(x[i], peso[i])
+        expressao += f"{peso[i]}{x[i].name()}"
+    
+        if i < len(peso) - 1:
+            expressao += " + "
+
+    print("\nRestrição criada:")
+    print(f"{expressao} <= {capacidade}")
 
 if __name__ == "__main__":
     main()
